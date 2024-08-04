@@ -16,45 +16,52 @@ function getHumanChoice() {
 
 let HumanScore = 0, ComputerScore = 0;
 function playRound(Computer_Choice, Human_Choice) {
-    
-    
-    if(option.indexOf(Computer_Choice) == option.indexOf(Human_Choice))
+    Computer_Choice = Computer_Choice.toUpperCase();
+    Human_Choice = Human_Choice.toUpperCase();
+    console.log(`Computer's Choice is : ${Computer_Choice}`);
+
+    if(Computer_Choice === Human_Choice)
     {
-        let Second_Choice = getComputerChoice();
-        console.log(`Computer choice: ${Second_Choice}`)
-        return playRound(Second_Choice, Human_Choice);
+        let ComputerSecondChoice = getComputerChoice();
+        while(ComputerSecondChoice === Human_Choice)
+        {
+             ComputerSecondChoice = getComputerChoice();
+        }
+         return playRound(ComputerSecondChoice, Human_Choice);
     }
-    
-    if((Computer_Choice == "ROCK" && Human_Choice == "SCISSOR") || (Computer_Choice == "PAPER" && Human_Choice == "ROCK") || (Computer_Choice == "SCISSOR" && Human_Choice == "PAPER"))
+    else if((Computer_Choice == option[0] && Human_Choice == option[1]) || (Computer_Choice == option[1] && Human_Choice == option[2]) || (Computer_Choice == option[2] && Human_Choice == option[0]) )
     {
-        ComputerScore++;
-        console.log(`Computer choice: ${Computer_Choice}`)
-        return console.log("You lose!! Better luck next time");
+        ++HumanScore;
+        return console.log(" You Win ");
     }
-   
-    else {
-        HumanScore++;
-        console.log(`Computer choice: ${Computer_Choice}`)
-    }
-    return console.log("You win");
+    if((Computer_Choice !== option[0] && Human_Choice !== option[1]) || (Computer_Choice !== option[1] && Human_Choice !== option[2]) || (Computer_Choice !== option[2] && Human_Choice !== option[0]))
+        {
+            ++ComputerScore;
+            return console.log("Better Luck Next Time");
+        };
+    
 }
 
-function playGame() {
-    for(let i = 0; i<5; i++)
-    {
-        let c_choice = getComputerChoice();
-        let u_choice = getHumanChoice();
-        playRound(c_choice, u_choice);
-        console.log(`ComputerScore: ${ComputerScore}`);
-        console.log(`YourScore: ${HumanScore}`);
-        
-    }
-    if(HumanScore > ComputerScore)
-    {
-        console.log(`Congratulations! You won`);
-    }
-    else {
-        console.log(`Try Harder Next Time`);
-    }
-}
-playGame();
+
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        console.log(`Your Response is : ${button.id}`);
+        playRound(getComputerChoice(), button.id);
+        console.log(`Your Score is : ${HumanScore}`);
+        console.log(`Computer Score is : ${ComputerScore}`);
+        if(HumanScore == 5)
+            {
+                console.log(`Congratulations you won the Game`)
+                HumanScore = 0;
+                ComputerScore = 0;
+            }
+            if(ComputerScore == 5){
+                console.log("The Computer Wins");
+                ComputerScore = 0;
+                HumanScore = 0;
+            }
+    });
+    
+});
